@@ -20,6 +20,6 @@ public class AppTest
     public void testAppMessage()
     {
         App app = new App();
-        assertEquals("This is Remiges Tecnologies, and i am Yash Kumar dubey", app.getMessage());
+        assertEquals("This is Remiges Tecnologies and i'm Yash Kumar dubey", app.getMessage());
     }
 }
