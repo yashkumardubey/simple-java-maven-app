@@ -5,7 +5,7 @@ package com.mycompany.app;
  */
 public class App {
 
-    private static final String MESSAGE = "This is yash dubey";
+    private static final String MESSAGE = "This is Remiges Tecnologies, and i am Yash Kumar dubey";
 
     public App() {}
 
