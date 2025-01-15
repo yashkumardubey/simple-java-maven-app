@@ -1,0 +1,40 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                // Run Maven build or other build steps
+                sh 'mvn clean package'
+            }
+        }
+        stage('Approval') {
+            steps {
+                script {
+                    // Manual approval
+                    input message: 'Deploy to production?', ok: 'Approve Deployment'
+                }
+            }
+        }
+        stage('Deploy to Remote Server') {
+            steps {
+                script {
+                    def localFile = "${env.WORKSPACE}/target/my-app-1.0-SNAPSHOT.jar"
+                    def remoteUser = "User_name"
+                    def remoteHost = "tomcat_ip "
+                    def tempLocation = "/home/ubuntu/my-app-1.0-SNAPSHOT.jar"
+                    def remoteDest = "/opt/tomcat/apache-tomcat-11.0.1/webapps/myapp"
+
+                    // Copy JAR to remote instance
+                    sh "scp ${localFile} ${remoteUser}@${remoteHost}:${tempLocation}"
+                    
+                    // Move JAR to Tomcat's webapps directory
+                    sh "ssh ${remoteUser}@${remoteHost} 'sudo mv ${tempLocation} ${remoteDest}'"
+                    
+                    // Restart Tomcat server
+                    sh "ssh ${remoteUser}@${remoteHost} 'sudo systemctl restart tomcat'"
+                }
+            }
+        }
+    }
+}
